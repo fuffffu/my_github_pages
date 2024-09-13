@@ -1,6 +1,12 @@
 name: ShellCheck
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   shellcheck:
@@ -11,10 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up ShellCheck
-        uses: bettercaps/shellcheck-action@v1
-        with:
-          shellcheck_version: latest
-
       - name: Run ShellCheck
-        run: shellcheck **/*.sh
+        uses: ludeeus/action-shellcheck@v1
+        with:
+          shellcheck_version: 'latest'
