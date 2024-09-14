@@ -1,0 +1,41 @@
+name: Lint Markdown Files
+
+# 当发生 push 或 pull request 时触发
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (needed for write-good)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Install proselint and write-good
+      - name: Install Lint Tools
+        run: |
+          pip install proselint
+          npm install -g write-good
+
+      # Step 4: Find all .md files and run proselint and write-good
+      - name: Lint Markdown Files
+        run: |
+          for file in $(find . -name '*.md'); do
+            echo "Linting $file with proselint"
+            proselint "$file"
+            echo "Linting $file with write-good"
+            write-good "$file"
+          done
